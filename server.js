@@ -8,6 +8,7 @@ const session = require('express-session')
 const MongoStore = require('connect-mongo')
 const authController = require('./controllers/auth.controller')
 const isSignedIn = require('./middleware/is-signed-in')
+const passUserToView = require('./middleware/pass-user-to-view')
 
 // DATABASE CONNECTION
 mongoose.connect(process.env.MONGODB_URI)
@@ -28,8 +29,9 @@ app.use(session({
     })
 }))
 
+app.use(passUserToView)
 app.get('/', (req, res) => {
-    res.render('index.ejs', { title: 'my App', user: req.session.user })
+    res.render('index.ejs', { title: 'my App'})
 })
 
 // ROUTES
